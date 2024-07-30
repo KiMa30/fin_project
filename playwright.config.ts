@@ -4,6 +4,7 @@ import { testPlanFilter } from "allure-playwright/testplan";
 export default defineConfig({
   // Look for test files in the "tests" directory, relative to this configuration file.
   testDir: './tests',
+  // timeout: 4 * 60 * 1000,
 
   // Run all tests in parallel.
   fullyParallel: true,
@@ -26,6 +27,7 @@ export default defineConfig({
 
     // Collect trace when retrying the failed test.
     trace: 'on-first-retry',
+    testIdAttribute: 'data-ui-id'
   },
   // Configure projects for major browsers.
   projects: [

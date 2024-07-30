@@ -1,5 +1,5 @@
-import { clientRestfulBooker } from "../helpers/clientAPI";
-import { logger } from "../helpers/logger";
+import { clientRestfulBooker } from "./clientAPI";
+import { logger } from "./logger";
 
 // Проверка соединения
 async function checkAPI() {

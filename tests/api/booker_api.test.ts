@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { config } from "../../framework/config/config";
 import { getPersonName } from "../../framework/helpers/genPersonName";
-import BookerPage from "../../framework/pages/BookerPage";
+import BookerActionsHelper from "../../framework/helpers/BookerActionsHelper";
 
 test.describe.configure({ mode: 'serial'});
 
@@ -23,12 +23,12 @@ test.describe('Авторизация и действия в сервисе бу
   let personId: number;
   
   test.beforeAll(async () => {
-    const responseCreate = await BookerPage.check()
+    const responseCreate = await BookerActionsHelper.check()
     expect(responseCreate.status).toBe(201);
   });
 
   test('Авторизация с не валидными кредами', async () => {
-    const responseCreate = await BookerPage.auth({
+    const responseCreate = await BookerActionsHelper.auth({
       userName: "somebody",
       passWord: "something",
     });
@@ -38,7 +38,7 @@ test.describe('Авторизация и действия в сервисе бу
   });
 
   test('Авторизация с валидными кредами', async () => {
-    const responseCreate = await BookerPage.auth({
+    const responseCreate = await BookerActionsHelper.auth({
       userName: config.apiUsername,
       passWord: config.apiPassword,
     });
@@ -49,7 +49,7 @@ test.describe('Авторизация и действия в сервисе бу
   });
 
   test('Создание брони с невалидным телом запроса', async () => {
-    const responseCreate = await BookerPage.create({
+    const responseCreate = await BookerActionsHelper.create({
       name: 123,
       surname: personLastName,
       price: 999,
@@ -63,7 +63,7 @@ test.describe('Авторизация и действия в сервисе бу
   })
 
   test('Создание брони с валидными данными в теле запроса', async () => {
-    const responseCreate = await BookerPage.create({
+    const responseCreate = await BookerActionsHelper.create({
       name: personName,
       surname: personLastName,
       price: 999,
@@ -86,7 +86,7 @@ test.describe('Авторизация и действия в сервисе бу
   })
 
   test('Запрос данных по созданной брони по id', async () => {
-    const responseCreate = await BookerPage.get(personId);
+    const responseCreate = await BookerActionsHelper.get(personId);
 
     expect(responseCreate.status).toBe(200);
     expect(responseCreate.data.firstname).toBe(personName);
@@ -95,7 +95,7 @@ test.describe('Авторизация и действия в сервисе бу
   })
 
   test('Обновление всей брони', async () => {
-    const responseCreate = await BookerPage.update(
+    const responseCreate = await BookerActionsHelper.update(
       {
       id: personId,
       authToken: apiToken,
@@ -120,7 +120,7 @@ test.describe('Авторизация и действия в сервисе бу
   })
 
   test('Запрос данных по обновленной брони по id', async () => {
-    const responseCreate = await BookerPage.get(personId);
+    const responseCreate = await BookerActionsHelper.get(personId);
 
     expect(responseCreate.status).toBe(200);
     expect(responseCreate.data.firstname).toBe(personTwoName);
@@ -129,7 +129,7 @@ test.describe('Авторизация и действия в сервисе бу
   })
 
   test('Обновление брони частично', async () => {
-    const responseCreate = await BookerPage.updatePart(
+    const responseCreate = await BookerActionsHelper.updatePart(
       {
       id: personId,
       authToken: apiToken,
@@ -150,7 +150,7 @@ test.describe('Авторизация и действия в сервисе бу
   })
 
   test('Запрос данных по частично обновленной брони по id', async () => {
-    const responseCreate = await BookerPage.get(personId);
+    const responseCreate = await BookerActionsHelper.get(personId);
 
     expect(responseCreate.status).toBe(200);
     expect(responseCreate.data.firstname).toBe(personThreeName);
@@ -159,13 +159,13 @@ test.describe('Авторизация и действия в сервисе бу
   })
 
   test('Удаление брони', async () => {
-    const responseCreate = await BookerPage.delete(personId, apiToken);
+    const responseCreate = await BookerActionsHelper.delete(personId, apiToken);
 
     expect(responseCreate.status).toBe(201);
   })
 
   test('Запрос брони по id после удаления', async () => {
-    const responseCreate = await BookerPage.get(personId);
+    const responseCreate = await BookerActionsHelper.get(personId);
 
     expect(responseCreate.status).toBe(404);
   })
