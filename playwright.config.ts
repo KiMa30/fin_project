@@ -3,6 +3,7 @@ import { testPlanFilter } from "allure-playwright/testplan";
 
 export default defineConfig({
   // Look for test files in the "tests" directory, relative to this configuration file.
+  // testDir: './tests/e2e',
   testDir: './tests',
   // timeout: 4 * 60 * 1000,
 
@@ -16,8 +17,8 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
 
   // Opt out of parallel tests on CI.
-  // workers: process.env.CI ? 1 : undefined,
-  workers: 1,
+  workers: process.env.CI ? 1 : undefined,
+  // workers: 1,
   // Reporter to use
   // reporter: 'html',
 
