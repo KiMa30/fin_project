@@ -33,9 +33,16 @@ export default defineConfig({
   // Configure projects for major browsers.
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'UI_E2E_LUMA',
+      testDir: './tests/e2e',
+      use: { ...devices['Desktop Chrome'] 
+
+      },
     },
+    {
+      name: 'Booker_api',
+      testDir: './tests/api',
+    }
   ],
   grep: testPlanFilter(),
   reporter: [["line"], ["allure-playwright"]],

@@ -51,6 +51,7 @@ export class LumaPage {
   async submitButton(buttonText: string) {
     await this.page.locator(`(//span[contains(text(), "${buttonText}")
         and not(preceding::span[contains(text(), "${buttonText}")])])`).click();
+    logger.info(`Форма ${buttonText} отправлена`);
   }
 
   async resultOfSubmit() {
