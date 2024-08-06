@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
+    "test:api": "npx playwright test tests/api/",
+    "test:ui": "npx playwright test tests/e2e/",
     "lint": "eslint \"*/**/*.{ts,tsx}\"",
     "lint:fix": "eslint \"*/**/*.{ts,tsx}\" --fix",
     "allure:local": "allure serve allure-results",

@@ -1,0 +1,65 @@
+name: API and E2E UI playwright ts
+on:
+  push:
+    branches: main
+  pull_request:
+    branches: main
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 21.2.0
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+
+  test:
+    timeout-minutes: 10
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 21.2.0
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set environment variables
+        run: echo "${{ vars.REMOTE_ENV }}" >> .env
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run API tests
+      - run: npm run test:api
+
+      - name: Run E2E tests
+      - run: npm run test:ui
+
+      - name: Generate Allure report
+        run: npm run allure:ci
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          if-no-files-found: error
+          path: ./allure-report
+
+      - name: Upload report
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './allure-report'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
