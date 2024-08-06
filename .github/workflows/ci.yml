@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: main
 
+permissions:
+  content: read
+  id-token: write
+  pages: write
+
 jobs:
   eslint:
     runs-on: ubuntu-latest
