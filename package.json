@@ -11,7 +11,10 @@
     "lint:fix": "eslint \"*/**/*.{ts,tsx}\" --fix",
     "allure:local": "allure serve allure-results",
     "allure:ci": "allure generate allure-results --clean",
-    "allure:ci:show": "allure open allure-report"
+    "allure:ci:show": "allure open allure-report",
+    "tsc:compile": "npx tsc framework/reporthelper/copyHistory.ts",
+    "copy:report": "node framework/reporthelper/copyHistory.js"
+
   },
   "keywords": [],
   "author": "",

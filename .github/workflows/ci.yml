@@ -1,6 +1,7 @@
 name: API and E2E UI playwright ts
 
 on:
+  workflow_dispatch:
   push:
     branches:
   pull_request:
@@ -45,6 +46,9 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Compile TS
+        run: npm run tsc:compile  
+
       - name: Run API tests
         run: npm run test:api
 
@@ -53,6 +57,9 @@ jobs:
 
       - name: Generate Allure report
         run: npm run allure:ci
+
+      - name: Copy Allure history
+        run: npm run copy:report
 
       - name: Upload report
         uses: actions/upload-artifact@v4

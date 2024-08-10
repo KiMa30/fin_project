@@ -11,6 +11,20 @@ test.describe('Авторизация в магазине товаров для 
   const lumaPassword = lumaUser.password;
 
   test('Авторизация с невалидными кредами', async ({ page }) => {
+    
+    await page.route('**/*', (route, request) => {
+      const urlFailed = request.url();
+      if (urlFailed.includes('connect.facebook.net') || urlFailed.includes('doubleclick')) {
+        // route.abort();
+        route.fulfill({
+          status: 200,
+          body: 'mocked response',
+        });
+      } else {
+        route.continue();
+      }
+    });
+
     // Переходим на страницу ресурса
     await page.goto(url);
     await page.waitForLoadState('load');
@@ -18,7 +32,7 @@ test.describe('Авторизация в магазине товаров для 
 
     // Подключаем стрницу магазина Luma Yoga
     const Luma = new LumaPage(page);
-
+    // await page.pause();
     // Проверяем, что находимся на главной странице
     await Luma.checkOnMainPage();
 
@@ -26,7 +40,9 @@ test.describe('Авторизация в магазине товаров для 
     await Luma.clickSignIn();
 
     // Проверяем,что открылась страница авторизации
+    // await Luma.pageTitleCheck('page-title-wrapper', 'Логин');
     await Luma.pageTitleCheck('page-title-wrapper', 'Customer Login');
+
 
     // Вводим рандомно сгенерированные логин и пароль
     await Luma.fillInput('Email', `${lumaEmail}`);
