@@ -160,6 +160,15 @@ async function getBookingById(id: number) {
 }
 
 // ################################################################################################################
+// Запрос всех бронирвоаний
+async function getAllBookings() {
+  const response = await clientRestfulBooker.get(`/booking`);
+
+  logger.info('Получены ID всех бронирований');
+  return response;
+}
+
+// ################################################################################################################
 // Удаление брони
 async function deleteBooking(id: number, authToken: string) {
   const response = await clientRestfulBooker.delete(`/booking/${id}`, {
@@ -179,4 +188,5 @@ export default {
   updatePart: updatePartialBooking,
   get: getBookingById,
   delete: deleteBooking,
+  getAll: getAllBookings,
 };

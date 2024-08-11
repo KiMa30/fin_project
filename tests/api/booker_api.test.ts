@@ -54,8 +54,8 @@ test.describe('Авторизация и действия в сервисе бу
       surname: personLastName,
       price: 999,
       deposit: true,
-      checkIn: "2024-07-31",
-      checkOut: "2024-08-10",
+      checkIn: "2024-08-15",
+      checkOut: "2024-08-20",
       addInfo: "Breakfast every morning, please"
     })
 
@@ -68,8 +68,8 @@ test.describe('Авторизация и действия в сервисе бу
       surname: personLastName,
       price: 999,
       deposit: true,
-      checkIn: "2024-07-31",
-      checkOut: "2024-08-10",
+      checkIn: "2024-08-15",
+      checkOut: "2024-08-20",
       addInfo: "Breakfast every morning, please"
     })
 
@@ -79,8 +79,8 @@ test.describe('Авторизация и действия в сервисе бу
     expect(responseCreate.data.booking.firstname).toBe(personName);
     expect(responseCreate.data.booking.lastname).toBe(personLastName);
     expect(responseCreate.data.booking.totalprice).toBe(999);
-    expect(responseCreate.data.booking.bookingdates.checkin).toBe("2024-07-31");
-    expect(responseCreate.data.booking.bookingdates.checkout).toBe("2024-08-10");
+    expect(responseCreate.data.booking.bookingdates.checkin).toBe("2024-08-15");
+    expect(responseCreate.data.booking.bookingdates.checkout).toBe("2024-08-20");
     expect(responseCreate.data.booking.depositpaid).toBe(true);
     expect(responseCreate.data.booking.additionalneeds).toBe("Breakfast every morning, please");
   })
@@ -103,8 +103,8 @@ test.describe('Авторизация и действия в сервисе бу
       surname: personTwoLastName,
       price: 888,
       deposit: true,
-      checkIn: "2024-07-31",
-      checkOut: "2024-08-10",
+      checkIn: "2024-08-15",
+      checkOut: "2024-08-20",
       addInfo: "Could you cancel breakfast, please"
     }
   )
@@ -113,8 +113,8 @@ test.describe('Авторизация и действия в сервисе бу
     expect(responseCreate.data.firstname).toBe(personTwoName);
     expect(responseCreate.data.lastname).toBe(personTwoLastName);
     expect(responseCreate.data.totalprice).toBe(888);
-    expect(responseCreate.data.bookingdates.checkin).toBe("2024-07-31");
-    expect(responseCreate.data.bookingdates.checkout).toBe("2024-08-10");
+    expect(responseCreate.data.bookingdates.checkin).toBe("2024-08-15");
+    expect(responseCreate.data.bookingdates.checkout).toBe("2024-08-20");
     expect(responseCreate.data.depositpaid).toBe(true);
     expect(responseCreate.data.additionalneeds).toBe("Could you cancel breakfast, please");
   })
@@ -143,8 +143,8 @@ test.describe('Авторизация и действия в сервисе бу
     expect(responseCreate.data.firstname).toBe(personThreeName);
     expect(responseCreate.data.lastname).toBe(personThreeLastName);
     expect(responseCreate.data.totalprice).toBe(888);
-    expect(responseCreate.data.bookingdates.checkin).toBe("2024-07-31");
-    expect(responseCreate.data.bookingdates.checkout).toBe("2024-08-10");
+    expect(responseCreate.data.bookingdates.checkin).toBe("2024-08-15");
+    expect(responseCreate.data.bookingdates.checkout).toBe("2024-08-20");
     expect(responseCreate.data.depositpaid).toBe(true);
     expect(responseCreate.data.additionalneeds).toBe("You are probably annoyed by the third change of booking. Sorry!");
   })
@@ -158,6 +158,15 @@ test.describe('Авторизация и действия в сервисе бу
     expect(responseCreate.data.additionalneeds).toBe("You are probably annoyed by the third change of booking. Sorry!");
   })
 
+  test('Бронь присутствует среди все бронирований', async () => {
+    const responseCreate = await BookerActionsHelper.getAll();
+
+    expect(responseCreate.status).toBe(200);
+
+    const bookingIds = responseCreate.data.map((booking: { bookingid: number }) => booking.bookingid);
+    expect(bookingIds).toContain(personId);
+  })
+
   test('Удаление брони', async () => {
     const responseCreate = await BookerActionsHelper.delete(personId, apiToken);
 
@@ -168,6 +177,15 @@ test.describe('Авторизация и действия в сервисе бу
     const responseCreate = await BookerActionsHelper.get(personId);
 
     expect(responseCreate.status).toBe(404);
+  })
+
+  test('Бронь не присутствует среди всех бронирований после удаления', async () => {
+    const responseCreate = await BookerActionsHelper.getAll();
+
+    expect(responseCreate.status).toBe(200);
+
+    const bookingIds = responseCreate.data.map((booking: { bookingid: number }) => booking.bookingid);
+    expect(bookingIds).not.toContain(personId);
   })
 
 })
